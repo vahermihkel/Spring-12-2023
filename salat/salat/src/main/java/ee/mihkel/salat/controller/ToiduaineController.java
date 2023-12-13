@@ -56,4 +56,21 @@ public class ToiduaineController {
         toiduaineRepository.save(toiduaine);
         return toiduaineRepository.findAll();
     }
+
+    // liida kokku kõikide Toiduainete valgud mis on andmebaasis
+    @GetMapping("koik-valgud")   // localhost:8080/koik-valgud
+    public int koikValgudKokku() {
+        int summa = 0;
+//        summa = summa + 5; //   5  = 0 + 5
+//        summa = summa + 2; //   7  = 5 + 2
+        //                      toiduaineRepository.count()
+        List<Toiduaine> toiduained = toiduaineRepository.findAll();
+//        for (int i = 0; i < toiduained.size(); i++) {
+//            summa = summa + toiduained.get(i).getValk();
+//        }
+        for (Toiduaine toiduaine : toiduained) {
+            summa += toiduaine.getValk();
+        }
+        return summa;
+    }
 }
