@@ -34,7 +34,12 @@ public class ToiduaineController {
 
     @GetMapping("toiduaine")   // localhost:8080/toiduaine
     public Toiduaine saaToiduaine() {
-        return new Toiduaine();
+        return new Toiduaine(); // <--- tagastab kogu aeg tühja Toiduaine: {nimi: null, valk: 0, rasv: 0, sysivesik: 0}
+    } // oli läbimängimiseks
+
+    @GetMapping("toiduained")   // localhost:8080/toiduained
+    public List<Toiduaine> saaToiduained() {
+        return toiduaineRepository.findAll();
     }
 
     @GetMapping("lisa-toiduaine/{nimi}/{rasv}/{valk}/{sysivesik}")   // localhost:8080/lisa-toiduaine/kartul/1/2/40
@@ -72,5 +77,40 @@ public class ToiduaineController {
             summa += toiduaine.getValk();
         }
         return summa;
+    }
+
+    @GetMapping("koik-rasvad")   // localhost:8080/koik-rasvad
+    public int koikRasvadKokku() {
+        int summa = 0;
+        List<Toiduaine> toiduained = toiduaineRepository.findAll();
+        for (Toiduaine toiduaine : toiduained) {
+            summa += toiduaine.getRasv();
+        }
+        return summa;
+    }
+
+    @GetMapping("keskmine-valk")   // localhost:8080/keskmine-valk
+    public double keskmineValk() {
+        double summa = 0;
+        List<Toiduaine> toiduained = toiduaineRepository.findAll();
+        for (Toiduaine toiduaine : toiduained) {
+            summa += toiduaine.getValk();
+        }
+        return summa/toiduaineRepository.findAll().size();
+    }
+
+    @GetMapping("valk-vahemikus")   // localhost:8080/valk-vahemikus?minValk=1&maxValk=10
+    public List<Toiduaine> valkVahemikus(
+            @RequestParam int minValk,
+            @RequestParam int maxValk
+    ) {
+        List<Toiduaine> sobivadToiduained = new ArrayList<>();
+        List<Toiduaine> toiduained = toiduaineRepository.findAll();
+        for (Toiduaine t : toiduained) {
+            if (t.getValk() > minValk && t.getValk() < maxValk) {
+                sobivadToiduained.add(t);
+            }
+        }
+        return sobivadToiduained;
     }
 }
