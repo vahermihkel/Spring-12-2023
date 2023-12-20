@@ -2,8 +2,10 @@ package ee.mihkel.salat.controller;
 
 import ee.mihkel.salat.entity.Toiduaine;
 import ee.mihkel.salat.entity.Toit;
+import ee.mihkel.salat.entity.Valmistaja;
 import ee.mihkel.salat.repository.ToiduaineRepository;
 import ee.mihkel.salat.repository.ToitRepository;
+import ee.mihkel.salat.repository.ValmistajaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,25 +23,31 @@ public class ToitController {
     @Autowired
     ToiduaineRepository toiduaineRepository;
 
+    @Autowired
+    ValmistajaRepository valmistajaRepository;
+
     @GetMapping("koik-toidud") // localhost:8080/koik-toidud
     public List<Toit> koikToidud() {
        return toitRepository.findAll();
     }
 
-    @GetMapping("lisa-toit") // localhost:8080/lisa-toit?id=1&nimetus=Kartulisalat&toiduainedIds=kartul,vorst,hapukoor
+    @GetMapping("lisa-toit") // localhost:8080/lisa-toit?nimetus=Kartulisalat&toiduainedIds=kartul,vorst,hapukoor&valmistajaId=3
     public List<Toit> lisaToit(
-            @RequestParam Long id,
             @RequestParam String nimetus,
-            @RequestParam List<String> toiduainedIds
+            @RequestParam List<String> toiduainedIds,
 //            @RequestParam String[] toiduainedIds
+            @RequestParam Long valmistajaId // 5
             ) {
 
-        System.out.println(id);
-        System.out.println(nimetus);
+        Toit toit = new Toit(); // {id: 0, nimetus: "", toiduained: [], valmistaja: null}
+        //toit.setId(id);        //  {id: 0, nimetus: "", toiduained: [], valmistaja: null}
+        toit.setNimetus(nimetus); //{id: 0, nimetus: "kartulisalat", toiduained: [], valmistaja: null}
 
-        Toit toit = new Toit(); // {id: 0, nimetus: "", toiduained: []}
-        toit.setId(id);        //  {id: 1, nimetus: "", toiduained: []}
-        toit.setNimetus(nimetus); //{id: 1, nimetus: "kartulisalat", toiduained: []}
+
+        Valmistaja valmistaja = valmistajaRepository.findById(valmistajaId).get(); // Võtan selle ID (5) ---> võtan andmebaasist terve rea
+        toit.setValmistaja(valmistaja); //{id: 1, nimetus: "kartulisalat", toiduained: [], valmistaja: {TERVE RIDA ANDMEBAASIST}}
+
+
 
         List<Toiduaine> toitToiduained = new ArrayList<>(); // SIIA HAKKAN PANEMA TOIDUAINEID MILLE ID KAASA ANTI
         for (String i: toiduainedIds) {

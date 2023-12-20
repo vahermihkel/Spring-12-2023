@@ -23,4 +23,15 @@ public class Toit {
     private String nimetus; // Kartulisalat
     @ManyToMany
     private List<Toiduaine> toiduained; // {nimi: Kartul, valk: 2}, {nimi: Vorst, valk: 8}
+
+    @ManyToOne
+//    @JoinColumn(name = "valmistaja_id") --> niimoodi ta seobki by default
+    //  name = "tabel_primaarvõti"     --> ei pea panema, see on rõhutamiseks
+    private Valmistaja valmistaja;
+
+    // @ManyToOne
+    // private ÜKS KLASS muutuja
+
+    // @ManyToMany
+    // private List<KLASS> muutuja
 }

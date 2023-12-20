@@ -63,4 +63,48 @@ public class Kodutoo1Controller {
     // [{"id":1,"number":15},{"id":11,"number":8},{"id":21,"number":8},{"id":2,"number":8}]
     // k={"id":1,"number":15}
     // k={"id":11,"number":8}
+
+//    @GetMapping("lisa-film") // localhost:8080/lisa-film?filmiUnikaalsuseTunnus=1&actoriteUnikaalsedTunnused=5,8,10
+//    public List<Film> lisaFilm(
+//            @RequestParam Long filmiUnikaalsuseTunnus,
+//            @RequestParam String nimi,
+//            @RequestParam int aasta,
+//            @RequestParam String riik,
+//            @RequestParam List<Long> actoriteUnikaalsedTunnused  // 5,8,10
+//    ) {
+//        Film uusFilm = new Film(); // andmebaasitabeli tüübi mille väärtused on kõik tühjad
+//        uusFilm.setId(filmiUnikaalsuseTunnus);
+//        uusFilm.setNimi(nimi);
+//        uusFilm.setAasta(aasta);
+//        uusFilm.setRiik(riik);
+//              // ArrayList <- sinna on võimalik juurde liita, kustutada jne
+//        List<Actor> filmileLisatavadActorid = new ArrayList<>(); // [] <- Siia sisse saab panna ainult tüüpi "Actor"
+//        for (Long i : actoriteUnikaalsedTunnused) {
+//            Actor lisatavActor = actorRepository.findById(i).get();
+//            filmileLisatavadActorid.add(lisatavActor);
+//        }
+////        for (Long 5 : [5,8,10,1,0]) {
+////            Actor lisatavActor = actorRepository.findById(5).get(); ---> Võtab Actori, kes on Andmebaasis IDga 5
+////            filmileLisatavadActorid.add(lisatavActor); ---> Lisab selle Actori minu tühja Listi
+////        }
+////        for (Long 8 : [5,8,10,1,0]) {
+////            Actor lisatavActor = actorRepository.findById(8).get(); ---> Võtab Actori, kes on Andmebaasis IDga 8
+////            filmileLisatavadActorid.add(lisatavActor); ---> Lisab selle Actori minu tühja Listi
+////        }
+//        for (int i = 0; i < actoriteUnikaalsedTunnused.size(); i++) {
+//            Long id = actoriteUnikaalsedTunnused.get(i); // 5, 8
+//        }
+//        // Long 5 :  [5,8,10, 1, 0]
+//        // Long 8 :  [5,8,10, 1, 0]
+//        // Long 10 :  [5,8,10, 1, 0]
+//        // Long 1 :  [5,8,10, 1, 0]
+//        // Long 0 :  [5,8,10, 1, 0]
+////        for (Long i : actoriteUnikaalsedTunnused) {
+////            filmileLisatavadActorid.add(actorRepository.findById(i).get());
+////        }
+//        uusFilm.setActorid(filmileLisatavadActorid);
+//
+//        filmidRepository.save(uusFilm);
+//        return filmidRepository.findAll();
+//    }
 }
