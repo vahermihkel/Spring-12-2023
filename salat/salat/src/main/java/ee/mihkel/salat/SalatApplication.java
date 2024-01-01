@@ -11,3 +11,23 @@ public class SalatApplication {
 	}
 
 }
+
+// 8
+
+// 9. 11.12
+// 10. 13.12
+// 11. 18.12
+// 12. 20.12
+
+//13.  26.12 @ManyToOne @ManyToMany @OneToOne @OneToMany
+//		OneToOne sees olev CascadeType.ALL
+//      parent classis List vs alamklassis 1
+//		kas luues anda alamklassid või eraldi API päring
+//		custom repository päringuid
+//14.  29.12 front-end
+// T 17.30 alates
+//15.  K 16.00 front-end
+// N 16.00
+//16. 05.01  R 16.00
+// 17. 08.01
+// 18. 17.01 lõpuprojekti teiepoolne esitamine

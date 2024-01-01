@@ -1,0 +1,33 @@
+.App {
+  text-align: center;
+}
+
+.logo {
+  width: 100px;
+  height: 100px;
+}
+
+.logo:hover {
+  cursor: pointer;
+  opacity: 70%;
+}
+
+.logo:active {
+  width: 99px;
+  height: 99px;
+}
+
+.button {
+  background-color: brown;
+  color: white;
+  border-radius: 5px;
+}
+
+.button:hover {
+  background-color: rgb(125, 45, 45);
+  cursor: pointer;
+}
+
+.button:active {
+  text-decoration: underline;
+}

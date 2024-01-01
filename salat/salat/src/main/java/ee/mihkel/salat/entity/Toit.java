@@ -24,6 +24,9 @@ public class Toit {
     @ManyToMany
     private List<Toiduaine> toiduained; // {nimi: Kartul, valk: 2}, {nimi: Vorst, valk: 8}
 
+//    @OneToMany <-- kui lisan kellelegi ühe Toiduaine, siis seda enam teisele lisada ei saa
+//    private List<Toiduaine> toiduained;
+//
     @ManyToOne
 //    @JoinColumn(name = "valmistaja_id") --> niimoodi ta seobki by default
     //  name = "tabel_primaarvõti"     --> ei pea panema, see on rõhutamiseks

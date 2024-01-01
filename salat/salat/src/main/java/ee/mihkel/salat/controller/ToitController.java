@@ -7,15 +7,13 @@ import ee.mihkel.salat.repository.ToiduaineRepository;
 import ee.mihkel.salat.repository.ToitRepository;
 import ee.mihkel.salat.repository.ValmistajaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin("http://localhost:3000") // takistab CORS errorit (ei lasta teisi rakendusi meie backendile ligi)
 public class ToitController {
 
     @Autowired

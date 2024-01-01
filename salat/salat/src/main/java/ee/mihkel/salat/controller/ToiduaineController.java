@@ -104,13 +104,13 @@ public class ToiduaineController {
             @RequestParam int minValk,
             @RequestParam int maxValk
     ) {
-        List<Toiduaine> sobivadToiduained = new ArrayList<>();
-        List<Toiduaine> toiduained = toiduaineRepository.findAll();
-        for (Toiduaine t : toiduained) {
-            if (t.getValk() > minValk && t.getValk() < maxValk) {
-                sobivadToiduained.add(t);
-            }
-        }
-        return sobivadToiduained;
+//        List<Toiduaine> sobivadToiduained = new ArrayList<>();
+//        List<Toiduaine> toiduained = toiduaineRepository.findAll();
+//        for (Toiduaine t : toiduained) {
+//            if (t.getValk() > minValk && t.getValk() < maxValk) {
+//                sobivadToiduained.add(t);
+//            }
+//        }
+        return toiduaineRepository.findAllByValkBetween(minValk, maxValk);
     }
 }

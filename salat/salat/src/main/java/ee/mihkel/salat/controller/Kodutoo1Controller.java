@@ -49,15 +49,17 @@ public class Kodutoo1Controller {
         return kodutoo1Repository.findAll().size();
     }
 
+    // ütles mitu numbrit on suurem kui sisseantud arv
     @GetMapping("numbrite-arv") // localhost:8080/numbrite-arv?arv=5
     public int numbriteArv(@RequestParam int arv) {
-        List<Kodutoo1> kodutoo1s = new ArrayList<>();
-        for ( Kodutoo1 k : kodutoo1Repository.findAll()) {
-            if (k.getNumber() > arv) {
-                kodutoo1s.add(k);
-            }
-        }
-        return kodutoo1s.size();
+//        List<Kodutoo1> kodutoo1s = new ArrayList<>();
+//        for ( Kodutoo1 k : kodutoo1Repository.findAll()) {
+//            if (k.getNumber() > arv) {
+//                kodutoo1s.add(k);
+//            }
+//        }
+
+        return kodutoo1Repository.findAllByNumberGreaterThan(arv).size();
     }
 
     // [{"id":1,"number":15},{"id":11,"number":8},{"id":21,"number":8},{"id":2,"number":8}]
