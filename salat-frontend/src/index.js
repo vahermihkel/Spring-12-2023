@@ -6,7 +6,8 @@ import App from './App';
 import { BrowserRouter } from "react-router-dom"
 
 // Navigeerimiseks:
-// 1. npm install react-router-dom
+// 1. npm install react-router-dom 
+//  -> lisab node_modules kausta kõik navigeerimiseks vajalikud koodilõigud
 // 2. import BrowserRouterist
 // 3. ümbritsema <App /> faili BrowserRouteriga
 

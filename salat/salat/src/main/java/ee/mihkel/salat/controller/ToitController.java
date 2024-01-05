@@ -6,6 +6,8 @@ import ee.mihkel.salat.entity.Valmistaja;
 import ee.mihkel.salat.repository.ToiduaineRepository;
 import ee.mihkel.salat.repository.ToitRepository;
 import ee.mihkel.salat.repository.ValmistajaRepository;
+import ee.mihkel.salat.service.ToiduaineService;
+import ee.mihkel.salat.util.ToiduaineUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +26,9 @@ public class ToitController {
     @Autowired
     ValmistajaRepository valmistajaRepository;
 
+    @Autowired
+    ToiduaineService toiduaineService;
+
     @GetMapping("koik-toidud") // localhost:8080/koik-toidud
     public List<Toit> koikToidud() {
        return toitRepository.findAll();
@@ -41,16 +46,10 @@ public class ToitController {
         //toit.setId(id);        //  {id: 0, nimetus: "", toiduained: [], valmistaja: null}
         toit.setNimetus(nimetus); //{id: 0, nimetus: "kartulisalat", toiduained: [], valmistaja: null}
 
-
         Valmistaja valmistaja = valmistajaRepository.findById(valmistajaId).get(); // Võtan selle ID (5) ---> võtan andmebaasist terve rea
         toit.setValmistaja(valmistaja); //{id: 1, nimetus: "kartulisalat", toiduained: [], valmistaja: {TERVE RIDA ANDMEBAASIST}}
 
-
-
-        List<Toiduaine> toitToiduained = new ArrayList<>(); // SIIA HAKKAN PANEMA TOIDUAINEID MILLE ID KAASA ANTI
-        for (String i: toiduainedIds) {
-            toitToiduained.add(toiduaineRepository.findById(i).get());
-        }
+        List<Toiduaine> toitToiduained = toiduaineService.saaToiduained(toiduainedIds);
         toit.setToiduained(toitToiduained);
 
         toitRepository.save(toit);
@@ -94,22 +93,22 @@ public class ToitController {
         return  leitudToidud;
     }
 
+    @Autowired
+    ToiduaineUtil toiduaineUtil;
+
     @GetMapping("toit-min-valgud") // localhost:8080/toit-min-valgud?minValk=20
     public List<Toit> toitMinValgud(@RequestParam int minValk) {
         List<Toit> sobivadToidud = new ArrayList<>();
         List<Toit> toidud = toitRepository.findAll();
 
         for (Toit t: toidud) {
-            int summa = 0;
             List<Toiduaine> toitToiduained = t.getToiduained();
-            for (Toiduaine ta: toitToiduained) {
-                summa = summa + ta.getValk();
-            }
+            double summa = toiduaineUtil.saaToiduaineteValgud(toitToiduained);
             if (summa >= minValk) {
                 sobivadToidud.add(t);
             }
         }
 
-        return sobivadToidud;
+        return sobivadToidud; // ResponseEntity
     }
 }

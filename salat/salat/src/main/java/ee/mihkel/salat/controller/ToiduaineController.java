@@ -2,16 +2,15 @@ package ee.mihkel.salat.controller;
 
 import ee.mihkel.salat.entity.Toiduaine;
 import ee.mihkel.salat.repository.ToiduaineRepository;
+import ee.mihkel.salat.util.ToiduaineUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin("http://localhost:3000")
 public class ToiduaineController {
 
     @Autowired
@@ -64,19 +63,9 @@ public class ToiduaineController {
 
     // liida kokku kõikide Toiduainete valgud mis on andmebaasis
     @GetMapping("koik-valgud")   // localhost:8080/koik-valgud
-    public int koikValgudKokku() {
-        int summa = 0;
-//        summa = summa + 5; //   5  = 0 + 5
-//        summa = summa + 2; //   7  = 5 + 2
-        //                      toiduaineRepository.count()
+    public double koikValgudKokku() {
         List<Toiduaine> toiduained = toiduaineRepository.findAll();
-//        for (int i = 0; i < toiduained.size(); i++) {
-//            summa = summa + toiduained.get(i).getValk();
-//        }
-        for (Toiduaine toiduaine : toiduained) {
-            summa += toiduaine.getValk();
-        }
-        return summa;
+        return toiduaineUtil.saaToiduaineteValgud(toiduained);
     }
 
     @GetMapping("koik-rasvad")   // localhost:8080/koik-rasvad
@@ -89,13 +78,13 @@ public class ToiduaineController {
         return summa;
     }
 
+    @Autowired
+    ToiduaineUtil toiduaineUtil;
+
     @GetMapping("keskmine-valk")   // localhost:8080/keskmine-valk
     public double keskmineValk() {
-        double summa = 0;
         List<Toiduaine> toiduained = toiduaineRepository.findAll();
-        for (Toiduaine toiduaine : toiduained) {
-            summa += toiduaine.getValk();
-        }
+        double summa = toiduaineUtil.saaToiduaineteValgud(toiduained);
         return summa/toiduaineRepository.findAll().size();
     }
 
@@ -112,5 +101,12 @@ public class ToiduaineController {
 //            }
 //        }
         return toiduaineRepository.findAllByValkBetween(minValk, maxValk);
+    }
+
+    @GetMapping("kustuta-toiduaine/{nimi}")
+    public List<Toiduaine> kustutaToiduaine(@PathVariable String nimi) {
+
+        toiduaineRepository.deleteById(nimi);
+        return toiduaineRepository.findAll();
     }
 }

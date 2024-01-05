@@ -29,5 +29,5 @@ public class SalatApplication {
 //15.  K 16.00 front-end
 // N 16.00
 //16. 05.01  R 16.00
-// 17. 08.01
+// 17. 08.01 E 16.00 restTemplate järk, DTO, log.info()/log.debug(), config/@Autowired, ResponseEntity
 // 18. 17.01 lõpuprojekti teiepoolne esitamine

@@ -2,6 +2,7 @@ package ee.mihkel.salat.controller;
 
 import ee.mihkel.salat.entity.Kodutoo1;
 import ee.mihkel.salat.repository.Kodutoo1Repository;
+import ee.mihkel.salat.service.Kodutoo1Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -109,4 +110,19 @@ public class Kodutoo1Controller {
 //        filmidRepository.save(uusFilm);
 //        return filmidRepository.findAll();
 //    }
+    @Autowired
+    Kodutoo1Service kodutoo1Service;
+
+    @GetMapping("koikide-keskmine")
+    public double koikideKeskmine() {
+        List<Kodutoo1> kodutoo1s = kodutoo1Repository.findAll();
+        return kodutoo1Service.arvutaKeskmine(kodutoo1s);
+    }
+
+    // localhost:8080/keskmine-neil-kes-on-suurem-kui?arv=10
+    @GetMapping("keskmine-neil-kes-on-suurem-kui")
+    public double keskmineNeilKesOnSuuremKui(@RequestParam int arv) {
+        List<Kodutoo1> leitudArvud = kodutoo1Repository.findAllByNumberGreaterThan(arv);
+        return kodutoo1Service.arvutaKeskmine(leitudArvud);
+    }
 }

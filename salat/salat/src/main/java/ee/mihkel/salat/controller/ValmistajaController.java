@@ -6,6 +6,8 @@ import ee.mihkel.salat.entity.Toit;
 import ee.mihkel.salat.entity.Valmistaja;
 import ee.mihkel.salat.repository.ToitRepository;
 import ee.mihkel.salat.repository.ValmistajaRepository;
+import ee.mihkel.salat.service.ValmistajaService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,11 +21,18 @@ public class ValmistajaController {
     private final ValmistajaRepository valmistajaRepository;
     private final ToitRepository toitRepository;
 
+    private final ValmistajaService valmistajaService;
+
     public ValmistajaController(ValmistajaRepository valmistajaRepository,
-                                ToitRepository toitRepository) {
+                                ToitRepository toitRepository,
+                                ValmistajaService valmistajaService) {
         this.valmistajaRepository = valmistajaRepository;
         this.toitRepository = toitRepository;
+        this.valmistajaService = valmistajaService;
     }
+
+//    @Autowired
+//    ValmistajaService valmistajaService;
 
     // localhost:8080/lisa-valmistaja?eesnimi=Mari&perenimi=Laane&vanus=30&riik=Eesti?tel=555&aad=Tammsaare&email=m@m.com
     @GetMapping("lisa-valmistaja")
@@ -31,16 +40,11 @@ public class ValmistajaController {
             @RequestParam String eesnimi, @RequestParam String perenimi,
             @RequestParam int vanus, @RequestParam String riik,
             @RequestParam String tel, @RequestParam String aad, @RequestParam String email) {
-        Valmistaja valmistaja = new Valmistaja(); // {id: 0, eesnimi: null, perenimi: null, vanus: 0, riik: null}
-        valmistaja.setEesnimi(eesnimi);
-        valmistaja.setPerenimi(perenimi);
-        valmistaja.setVanus(vanus);
-        valmistaja.setRiik(riik);
+        Valmistaja valmistaja = valmistajaService.setValmistajaOmadused(
+                eesnimi, perenimi, vanus, riik
+        );
 
-        KontaktAndmed kontaktAndmed = new KontaktAndmed(); // {id: 0, telefon: null, aadress: null, email: null}
-        kontaktAndmed.setTelefon(tel); // {id: 0, telefon: "555", aadress: null, email: null}
-        kontaktAndmed.setAadress(aad); // {id: 0, telefon: "555", aadress: "Tammsaare", email: null}
-        kontaktAndmed.setEmail(email); // {id: 0, telefon: "555", aadress: "Tammsaare", email: "m@m.com"}
+        KontaktAndmed kontaktAndmed = valmistajaService.setValmistajaKontaktandmed(tel, aad, email);
         valmistaja.setKontaktAndmed(kontaktAndmed);
         // ma ei pea panema kontaktRepository.save(), et salvestada kontaktandmeid eraldi real andmebaasi, VAID
         // kui Valmistaja liigub andmebaasi ja tema küljes on setteriga pandud KontaktAndmed, siis ta liigub automaatselt
@@ -51,6 +55,8 @@ public class ValmistajaController {
         valmistajaRepository.save(valmistaja);
         return valmistajaRepository.findAll();
     }
+
+
 
     @GetMapping("valmistajad")   // localhost:8080/valmistajad
     public List<Valmistaja> saaValmistajad() {

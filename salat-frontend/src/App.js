@@ -1,27 +1,20 @@
-import { Link, Route, Routes } from "react-router-dom"
+import { Route, Routes } from "react-router-dom"
 import './App.css';
 import HomePage from './pages/HomePage';
 import Toiduaine from './pages/Toiduaine';
 import Toit from './pages/Toit';
+import NavigationBar from "./components/NavigationBar";
 
 function App() {
   /// kustuta kõik
   return (
     <div className="App">
-      <Link to="">
-        <img className="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Salad_platter.jpg/800px-Salad_platter.jpg" alt="" />
-      </Link>
-
-      <Link to="toiduained">
-        <button className="button">Toiduained</button>
-      </Link>
-
-      <Link to="toit">
-        <button className="button">Toidud</button>
-      </Link>
-      <br /><br />
+      <NavigationBar />
 
       <Routes>
+        {/* path sees mis järgneb localhost:3000, element sees, millise faili HTMLi seal näidatakse
+        localhost:3000/toit ---> Toit.jsx faili HTML ja sellega kaasnev JavaScript tuleb kaasa
+        */}
         <Route path="" element={ <HomePage /> } />
         <Route path="toiduained" element={ <Toiduaine /> } />
         <Route path="toit" element={ <Toit /> } />
