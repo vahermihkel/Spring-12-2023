@@ -9,6 +9,7 @@ import ee.mihkel.salat.repository.ValmistajaRepository;
 import ee.mihkel.salat.service.ToiduaineService;
 import ee.mihkel.salat.util.ToiduaineUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -30,12 +31,12 @@ public class ToitController {
     ToiduaineService toiduaineService;
 
     @GetMapping("koik-toidud") // localhost:8080/koik-toidud
-    public List<Toit> koikToidud() {
-       return toitRepository.findAll();
+    public ResponseEntity<List<Toit>> koikToidud() {
+       return ResponseEntity.ok(toitRepository.findAll());
     }
 
     @GetMapping("lisa-toit") // localhost:8080/lisa-toit?nimetus=Kartulisalat&toiduainedIds=kartul,vorst,hapukoor&valmistajaId=3
-    public List<Toit> lisaToit(
+    public ResponseEntity<List<Toit>> lisaToit(
             @RequestParam String nimetus,
             @RequestParam List<String> toiduainedIds,
 //            @RequestParam String[] toiduainedIds
@@ -53,8 +54,21 @@ public class ToitController {
         toit.setToiduained(toitToiduained);
 
         toitRepository.save(toit);
-        return toitRepository.findAll();
+        return ResponseEntity.status(201).body(toitRepository.findAll());
     }
+
+    // 1xx - informatsiooniline
+    // 200 - edukas päring
+    // 201 - edukalt lisatud
+    // 2xx - edukad
+    // 3xx - ümbersuunamised
+    // 4xx - kliendipoolsed vead (päringu väljakutsuja tegi midagi valesti)
+    // 404 - API otspunkt URL vale
+    // 400 - üldine
+    // 401/403 - autentimisega seotud
+    // 405 - tüübi viga PUT, POST, DELETE on vale
+    // 415 - body viga ehk annan body valel kujul
+    // 5xx - serveripoolsed vead (Springi koodis on midagi valesti) - array index on liiga suur
 
     @GetMapping("kustuta-toit/{id}")
     public List<Toit> kustutaToit(@PathVariable Long id) {

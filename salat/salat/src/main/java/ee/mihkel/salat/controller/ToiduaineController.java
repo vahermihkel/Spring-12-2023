@@ -1,16 +1,23 @@
 package ee.mihkel.salat.controller;
 
 import ee.mihkel.salat.entity.Toiduaine;
+import ee.mihkel.salat.entity.model.ToiduaineDTO;
 import ee.mihkel.salat.repository.ToiduaineRepository;
 import ee.mihkel.salat.util.ToiduaineUtil;
+import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
+@Log4j2
 public class ToiduaineController {
 
     @Autowired
@@ -36,9 +43,25 @@ public class ToiduaineController {
         return new Toiduaine(); // <--- tagastab kogu aeg tühja Toiduaine: {nimi: null, valk: 0, rasv: 0, sysivesik: 0}
     } // oli läbimängimiseks
 
-    @GetMapping("toiduained")   // localhost:8080/toiduained
-    public List<Toiduaine> saaToiduained() {
-        return toiduaineRepository.findAll();
+    @GetMapping("toiduained")   // localhost:8080/toiduained?page=0&size=3
+    public Page<Toiduaine> saaToiduained(Pageable pageable) {
+        return toiduaineRepository.findAll(pageable);
+    }
+
+    @Autowired
+    ModelMapper modelMapper;
+
+    @GetMapping("toiduained-dto")   // localhost:8080/toiduained-dto
+    public List<ToiduaineDTO> saaToiduainedDTO() {
+//        ModelMapper modelMapper = new ModelMapper();
+//        System.out.println("Hakkasin võtma toiduaineid");
+        log.info("Hakkasin võtma toiduaineid");
+        // log.debug() <-- ei ole LIVE keskkonnas
+//        System.out.println(modelMapper);
+        log.error(modelMapper); // KUI tekib, siis saadab automaatselt e-maili meie tööemailile
+        return toiduaineRepository.findAll().stream()
+                .map(t -> modelMapper.map(t, ToiduaineDTO.class))
+                .toList();
     }
 
     @GetMapping("lisa-toiduaine/{nimi}/{rasv}/{valk}/{sysivesik}")   // localhost:8080/lisa-toiduaine/kartul/1/2/40

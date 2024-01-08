@@ -1,12 +1,11 @@
 package ee.mihkel.salat.controller;
 
-import ee.mihkel.salat.entity.KontaktAndmed;
-import ee.mihkel.salat.entity.Toiduaine;
-import ee.mihkel.salat.entity.Toit;
-import ee.mihkel.salat.entity.Valmistaja;
+import ee.mihkel.salat.entity.*;
+import ee.mihkel.salat.entity.model.ValmistajaDTO;
 import ee.mihkel.salat.repository.ToitRepository;
 import ee.mihkel.salat.repository.ValmistajaRepository;
 import ee.mihkel.salat.service.ValmistajaService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,14 +33,15 @@ public class ValmistajaController {
 //    @Autowired
 //    ValmistajaService valmistajaService;
 
-    // localhost:8080/lisa-valmistaja?eesnimi=Mari&perenimi=Laane&vanus=30&riik=Eesti?tel=555&aad=Tammsaare&email=m@m.com
+    // localhost:8080/lisa-valmistaja?eesnimi=Peeter&perenimi=Laane&vanus=30&riik=ESTONIA?tel=555&aad=Tammsaare&email=m@m.com
+    //http://localhost:8080/lisa-valmistaja?eesnimi=Peeter&perenimi=Laane&vanus=30&&riik=Läti&mitmesRiik=1&tel=555&aad=Tammsaare&email=m@m.com
     @GetMapping("lisa-valmistaja")
     public List<Valmistaja> lisaValmistaja(
             @RequestParam String eesnimi, @RequestParam String perenimi,
-            @RequestParam int vanus, @RequestParam String riik,
+            @RequestParam int vanus, @RequestParam String riik ,@RequestParam int mitmesRiik,
             @RequestParam String tel, @RequestParam String aad, @RequestParam String email) {
         Valmistaja valmistaja = valmistajaService.setValmistajaOmadused(
-                eesnimi, perenimi, vanus, riik
+                eesnimi, perenimi, vanus, riik, Country.values()[mitmesRiik]
         );
 
         KontaktAndmed kontaktAndmed = valmistajaService.setValmistajaKontaktandmed(tel, aad, email);
@@ -59,8 +59,29 @@ public class ValmistajaController {
 
 
     @GetMapping("valmistajad")   // localhost:8080/valmistajad
-    public List<Valmistaja> saaValmistajad() {
-        return valmistajaRepository.findAll();
+    public List<ValmistajaDTO> saaValmistajad() {
+        List<Valmistaja> valmistajad = valmistajaRepository.findAll();
+        List<ValmistajaDTO> valmistajadDTOd = new ArrayList<>();
+        ModelMapper modelMapper = new ModelMapper();
+        for (Valmistaja v: valmistajad) {
+            ValmistajaDTO valmistajaDTO = modelMapper.map(v, ValmistajaDTO.class);
+            valmistajadDTOd.add(valmistajaDTO);
+
+//            ValmistajaDTO valmistajaDTO = new ValmistajaDTO();
+//            valmistajaDTO.setEesnimi(v.getEesnimi());
+//            valmistajaDTO.setRiik(v.getRiik());
+//            valmistajadDTOd.add(valmistajaDTO);
+        }
+        return valmistajadDTOd;
+    }
+
+    @GetMapping("valmistajad-dto")   // localhost:8080/valmistajad-dto
+    public List<ValmistajaDTO> saaValmistajadDTO() {
+        ModelMapper modelMapper = new ModelMapper();
+        List<ValmistajaDTO> valmistajadDTOd = valmistajaRepository.findAll().stream()
+                .map(v -> modelMapper.map(v, ValmistajaDTO.class))
+                .toList();
+        return valmistajadDTOd;
     }
 
     @GetMapping("valmistaja-toidud") // localhost:8080/valmistaja-toidud?id=1

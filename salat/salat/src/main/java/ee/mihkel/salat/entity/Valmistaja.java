@@ -18,6 +18,9 @@ public class Valmistaja {
     private String eesnimi;
     private String perenimi;
     private int vanus;
+    @Enumerated(EnumType.STRING)
+    private Country kodakondsus;
+
     private String riik;
     // vasakpoolne tähendab, et see klass pole jagatav
     @OneToOne(cascade = CascadeType.ALL) // parempoolne One tähendab, et siin pole listi

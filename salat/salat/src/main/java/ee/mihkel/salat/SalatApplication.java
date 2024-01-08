@@ -30,4 +30,7 @@ public class SalatApplication {
 // N 16.00
 //16. 05.01  R 16.00
 // 17. 08.01 E 16.00 restTemplate järk, DTO, log.info()/log.debug(), config/@Autowired, ResponseEntity
-// 18. 17.01 lõpuprojekti teiepoolne esitamine
+// 18. 22.01 lõpuprojekti teiepoolne esitamine  16.00-17.30
+// ärge katkiseid ära võtke --> lahendame koos
+// ei ole mingeid kohustusi
+// IDEID: proovitöödest, Youtube-st

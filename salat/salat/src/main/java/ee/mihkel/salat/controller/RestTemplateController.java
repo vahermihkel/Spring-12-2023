@@ -2,6 +2,7 @@ package ee.mihkel.salat.controller;
 
 import ee.mihkel.salat.model.Album;
 import ee.mihkel.salat.model.Product;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,9 +18,12 @@ import java.util.stream.Collectors;
 @RestController
 public class RestTemplateController {
 
+    @Autowired
+    RestTemplate restTemplate;
+
     @GetMapping("saa-albumid") // localhost:8080/saa-albumid?userId=2
     public List<Album> saaAlbumid(@RequestParam int userId) {
-        RestTemplate restTemplate = new RestTemplate();
+//        RestTemplate restTemplate = new RestTemplate();
         String url = "https://jsonplaceholder.typicode.com/albums";
         ResponseEntity<Album[]> response =  restTemplate.exchange(url, HttpMethod.GET, null, Album[].class);
         Album[] albums = response.getBody();
@@ -40,7 +44,7 @@ public class RestTemplateController {
 
     @GetMapping("saa-tooted") // localhost:8080/saa-tooted?minPrice=5.5
     public List<Product> saaTooted(@RequestParam double minPrice) {
-        RestTemplate restTemplate = new RestTemplate();
+//        RestTemplate restTemplate = new RestTemplate();
         String url = "https://fakestoreapi.com/products";
         ResponseEntity<Product[]> response =  restTemplate.exchange(url, HttpMethod.GET, null, Product[].class);
         Product[] products = response.getBody();
